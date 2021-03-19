@@ -1,0 +1,145 @@
+UI bugs:
+
+Tested in Windows 10 Pro OS Build 19041.867 with Google Chrome Version 89.0.4389.90 
+
+Bug #1
+First and Last names are reversed
+
+Steps to reproduce
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog Enter First Name, Last Name, No of Dependents
+Click on Add
+
+Expected Result >> First Name is saved in the column called First Name and Last Name is saved in the column called Last Name
+
+Actual Result >> First Name is saved in the column called Last Name and Last Name is saved in the column called First Name
+
+Bug #2
+Dependents is misspelled as Dependants in the Add Employee window
+
+Steps to reproduce
+Login to the Dashboard
+Click on Add Employee
+
+Expected Result >> In the Add Employee box title of the 3rd field should be Dependents
+Actual Result >> In the Add Employee box title of the 3rd field is Dependants
+
+Bug #3
+There is no visual indicator that First and Last Name are required and no UI error when they are missing
+
+Steps to reproduce
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog ...
+Expected Result >> There should be a visual indicator (e.g. an asterisk) that First Name and Last Name are required
+Actual Result >> There is no visual indicator that First Name and Last Name are required
+
+Click on Add 
+
+Expected Result >> An error message should be displayed that required fields are missing
+Actual Result >> No error is displayed. Dialog is not dismissed
+
+Bug #4
+There are no UI errors when invalid values are entered for Dependents
+
+Steps to reproduce
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog Enter First Name, Last Name
+Enter an invalid value for dependents (e.g 3.5 or abc or -1)
+Click on Add
+Expected Result >>  An error message is displayed that value is invalid
+Actual Result >> No error is displayed. Dialog is not dismissed
+
+Bug #5
+No UI error when the maximum number of dependents is exceeded (which is 32 according to the API)
+
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog Enter First Name, Last Name
+Enter 33 for dependents
+Click on Add
+Expected Result >>  An error message is displayed that value is outside the range
+Actual Result >> No error is displayed. Dialog is not dismissed
+
+Bug #6
+No UI error when maximum length is exceeded for name fields (which is 50 according to the API)
+
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog enter values for First Name and Last Name that exceed 50 characters
+Click on Add
+Expected Result >>  An error message is displayed that value is too long
+Actual Result >> No error is displayed. Dialog is not dismissed
+
+Bug #7
+First Name and Last name can be saved with invalid characters (e.g. numbers or special characters)
+
+Login to the Dashboard
+Click on Add Employee
+In the Add Employee Dialog enter values for First Name and Last Name include numbers or special characters
+Expected Result >>  An error message is displayed that value is invalid
+Actual Result >> No error is displayed. The values are successfully saved in the table
+
+Bug #8
+There is no way in the UI to enter or modify salary information. It can only be modified through the PUT API
+
+
+
+
+
+
+
+
+Usability issues
+#1 No hint text when hovering over edit and delete icons
+#2 Authentication times out without warning
+
+
+API Bugs
+
+Tested with Postman ver 8.07
+
+Bug #1
+
+API – GET employee
+
+Invalid id returns 200OK
+
+Send the following API
+GET https://wmxrwq14uc.execute-api.us-east-1.amazonaws.com/Prod/api/employees/{id}
+and use an invalid value for the id (i.e. one that does not exist in the table)
+
+Expected Result >> API returns 404 not found
+Actual Result >> API returns 200 OK with an empty result set
+
+Bug #2
+POST API will always default the salary value to 52000 even if a different value is specified in the body even though the PUT API will successfully modify the salary to a different value
+
+Bug #3(possible)
+POST API will allow entries with duplicate first and last name. 
+Uniqueness of first+last names is not explicitly specified in the requirements but seems like a reasonable requirement. May not be a bug, but noting it down for review.
+
+Bug #4
+PUT API with invalid id (i.e. one that is not in the table) creates a new record with a salary of 0 instead of returning a 404 not found error
+
+Bug #5
+PUT API with missing id (i.e. not specified in the id) returns 500 internal error instead of 404 not found error
+
+Bug #6
+DELETE API returns 200 OK if a non-existent id is returned
+
+Bug #7
+PUT and DELETE APIs return 500 internal server error if the id is specified in incorrect format (e.g. incorrect number of characters) instead of returning 404 not found.
+
+Other possible issues (non-funtional)
+POST API should return 201 Created instead of 200 OK
+DELETE API should return 204 instead of 200
+
+
+
+
+
+
+
